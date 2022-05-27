@@ -1,3 +1,4 @@
+use std::str::FromStr;
 use serde::{Serialize, Deserialize, Serializer};
 
 // https://ngff.openmicroscopy.org/0.4/#axes-md
@@ -71,6 +72,14 @@ pub struct SpaceAxis {
     pub unit: Option<SpaceUnit>,
 }
 
+impl FromStr for SpaceAxis {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self { name: s.to_string(), unit: None, })
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct TimeAxis {
     pub name: String,
@@ -79,9 +88,25 @@ pub struct TimeAxis {
     pub unit: Option<TimeUnit>,
 }
 
+impl FromStr for TimeAxis {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self { name: s.to_string(), unit: None, })
+    }
+}
+
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ChannelAxis {
     pub name: String,
+}
+
+impl FromStr for ChannelAxis {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self { name: s.to_string(), })
+    }
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -94,6 +119,14 @@ pub struct CustomAxis {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
+}
+
+impl FromStr for CustomAxis {
+    type Err = ();
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        Ok(Self { name: s.to_string(), axis_type: None, unit: None, })
+    }
 }
 
 // https://github.com/serde-rs/serde/issues/1799#issuecomment-624978919

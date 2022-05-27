@@ -13,7 +13,9 @@ use crate::coordinate_transformations::{
     Scale,
     Translation,
 };
-use crate::util::warn_unless;
+use crate::util::{IsValid, warn_unless};
+
+use crate::multiscale::Axes;
 
 #[derive(Serialize, Deserialize)]
 pub struct Dataset {
@@ -47,8 +49,8 @@ pub struct Multiscale {
     pub metadata: Option<Value>,
 }
 
-impl Multiscale {
-    pub fn get_space_axes(&self) -> Vec<SpaceAxis> {
+impl Axes for Multiscale {
+    fn get_space_axes(&self) -> Vec<SpaceAxis> {
         self.axes
             .iter()
             .filter(|&a| matches!(a, Axis::Space(_)))
@@ -56,7 +58,7 @@ impl Multiscale {
             .collect()
     }
 
-    pub fn get_time_axes(&self) -> Vec<TimeAxis> {
+    fn get_time_axes(&self) -> Vec<TimeAxis> {
         self.axes
             .iter()
             .filter(|&a| matches!(a, Axis::Time(_)))
@@ -64,7 +66,7 @@ impl Multiscale {
             .collect()
     }
 
-    pub fn get_channel_axes(&self) -> Vec<ChannelAxis> {
+    fn get_channel_axes(&self) -> Vec<ChannelAxis> {
         self.axes
             .iter()
             .filter(|&a| matches!(a, Axis::Channel(_)))
@@ -72,7 +74,7 @@ impl Multiscale {
             .collect()
     }
 
-    pub fn get_custom_axes(&self) -> Vec<CustomAxis> {
+    fn get_custom_axes(&self) -> Vec<CustomAxis> {
         self.axes
             .iter()
             .filter(|&a| matches!(a, Axis::Custom(_)))
@@ -80,14 +82,14 @@ impl Multiscale {
             .collect()
     }
 
-    pub fn get_time_axis(&self) -> Option<TimeAxis> {
+    fn get_time_axis(&self) -> Option<TimeAxis> {
         match &self.axes[0] {
             Axis::Time(axis) => Some(axis.clone()),
             _ => None
         }
     }
 
-    pub fn get_channel_axis(&self) -> Option<ChannelAxis> {
+    fn get_channel_axis(&self) -> Option<ChannelAxis> {
         let channel_axes: Vec<ChannelAxis> = self.get_channel_axes();
         if channel_axes.is_empty() {
             None
@@ -96,7 +98,7 @@ impl Multiscale {
         }
     }
 
-    pub fn get_custom_axis(&self) -> Option<CustomAxis> {
+    fn get_custom_axis(&self) -> Option<CustomAxis> {
         let custom_axes: Vec<CustomAxis> = self.get_custom_axes();
         if custom_axes.is_empty() {
             None
@@ -104,14 +106,18 @@ impl Multiscale {
             Some(custom_axes[0].clone())
         }
     }
+}
 
-    pub fn is_valid(&self) -> bool {
+impl IsValid for Multiscale {
+    fn is_valid(&self) -> bool {
         let axes_length = self.axes.len();
         self.are_axes_valid() &&
             Multiscale::are_coordinate_transformations_valid(self.coordinate_transformations.as_ref().unwrap_or(&Vec::new()), axes_length) &&
             self.datasets.iter().all(|d| Multiscale::are_coordinate_transformations_valid(&d.coordinate_transformations, axes_length))
     }
+}
 
+impl Multiscale {
     fn is_axes_length_valid(&self) -> bool {
         warn_unless!(
             self.axes.len() >= 2 && self.axes.len() <= 5,

@@ -1,6 +1,10 @@
 use serde::{Serialize, Deserialize};
 use serde_json::Value;
 
+use crate::util::IsValid;
+
+use crate::multiscale::Axes;
+
 #[derive(Serialize, Deserialize)]
 pub struct Dataset {
     pub path: String,
@@ -21,3 +25,6 @@ pub struct Multiscale {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<Value>,
 }
+
+impl Axes for Multiscale {}
+impl IsValid for Multiscale {}

@@ -1,3 +1,9 @@
+pub trait IsValid {
+    fn is_valid(&self) -> bool {
+        true
+    }
+}
+
 // todo: add example
 /// Checks whether a given boolean expression is true or false, logs a warning if it is false, and returns the result of the boolean expression.
 #[cfg(feature = "log")]
