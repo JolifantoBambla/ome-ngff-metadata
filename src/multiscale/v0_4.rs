@@ -269,22 +269,22 @@ mod tests {
     use super::*;
 
     fn t() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "t", "type": "time", "unit": "millisecond"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "t", "type": "time", "unit": "millisecond"}"#).unwrap()
     }
     fn c() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "c", "type": "channel"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "c", "type": "channel"}"#).unwrap()
     }
     fn custom() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "foo"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "foo"}"#).unwrap()
     }
     fn z() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "z", "type": "space", "unit": "micrometer"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "z", "type": "space", "unit": "micrometer"}"#).unwrap()
     }
     fn y() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "y", "type": "space", "unit": "micrometer"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "y", "type": "space", "unit": "micrometer"}"#).unwrap()
     }
     fn x() -> Axis {
-        serde_json::from_str::<Axis>(&r#"{"name": "x", "type": "space", "unit": "micrometer"}"#.to_string()).unwrap()
+        serde_json::from_str::<Axis>(r#"{"name": "x", "type": "space", "unit": "micrometer"}"#).unwrap()
     }
     fn tczyx() -> Vec<Axis> {
         vec![t(), c(), z(), y(), x()]

@@ -98,7 +98,7 @@ impl Multiscale {
     fn are_axis_names_known(&self) -> bool {
         warn_unless!(
             self.axes.iter().all(|a| vec!["t", "c", "z", "y", "x"].contains(&a.as_str())),
-            "The spec states: The values MUST be [...] one of {\"t\", \"c\", \"z\", \"y\", \"x\"}."
+            "The spec states: The values MUST be [...] one of {{\"t\", \"c\", \"z\", \"y\", \"x\"}}."
         )
     }
 
