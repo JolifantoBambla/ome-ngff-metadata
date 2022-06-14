@@ -189,7 +189,7 @@ impl Multiscale {
             self.is_axes_order_valid()
     }
 
-    fn are_coordinate_transformations_dimensions_valid(coordinate_transformations: &Vec<CoordinateTransformation>, axes_length: usize) -> bool {
+    fn are_coordinate_transformations_dimensions_valid(coordinate_transformations: &[CoordinateTransformation], axes_length: usize) -> bool {
         coordinate_transformations.iter().all(|c| {
             let transformation_length = match c {
                 CoordinateTransformation::Translation(Translation::Translation(translation)) => {
@@ -212,7 +212,7 @@ impl Multiscale {
         })
     }
 
-    fn are_coordinate_transformation_types_valid(coordinate_transformations: &Vec<CoordinateTransformation>) -> bool {
+    fn are_coordinate_transformation_types_valid(coordinate_transformations: &[CoordinateTransformation]) -> bool {
         coordinate_transformations.iter().all(|c| {
             warn_unless!(
                 match c {
@@ -226,7 +226,7 @@ impl Multiscale {
         })
     }
 
-    fn coordinate_transformations_contain_exactly_one_scale(coordinate_transformations: &Vec<CoordinateTransformation>) -> bool {
+    fn coordinate_transformations_contain_exactly_one_scale(coordinate_transformations: &[CoordinateTransformation]) -> bool {
         let scale_count = coordinate_transformations.iter()
             .filter(|c| matches!(c, CoordinateTransformation::Scale(_)))
             .count();
@@ -237,7 +237,7 @@ impl Multiscale {
         )
     }
 
-    fn coordinate_transformations_contain_at_most_one_translation(coordinate_transformations: &Vec<CoordinateTransformation>) -> bool {
+    fn coordinate_transformations_contain_at_most_one_translation(coordinate_transformations: &[CoordinateTransformation]) -> bool {
         let translation_count = coordinate_transformations.iter()
             .filter(|c| matches!(c, CoordinateTransformation::Translation(_)))
             .count();
@@ -248,17 +248,14 @@ impl Multiscale {
         )
     }
 
-    fn scale_is_first_element_in_coordinate_transformations(coordinate_transformations: &Vec<CoordinateTransformation>) -> bool {
+    fn scale_is_first_element_in_coordinate_transformations(coordinate_transformations: &[CoordinateTransformation]) -> bool {
         warn_unless!(
-            match coordinate_transformations[0] {
-                CoordinateTransformation::Scale(_) => true,
-                _ => false
-            },
+            matches!(coordinate_transformations[0], CoordinateTransformation::Scale(_)),
             "The spec states: If translation is given it MUST be listed after scale to ensure that it is given in physical coordinates."
         )
     }
 
-    fn are_coordinate_transformations_valid(coordinate_transformations: &Vec<CoordinateTransformation>, axes_length: usize) -> bool {
+    fn are_coordinate_transformations_valid(coordinate_transformations: &[CoordinateTransformation], axes_length: usize) -> bool {
         Multiscale::are_coordinate_transformations_dimensions_valid(coordinate_transformations, axes_length) &&
             Multiscale::are_coordinate_transformation_types_valid(coordinate_transformations) &&
             Multiscale::coordinate_transformations_contain_exactly_one_scale(coordinate_transformations)  &&
